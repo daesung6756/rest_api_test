@@ -68,6 +68,7 @@
                     // 서버로부터 응답을 받았을 때 실행할 작업을 여기에 추가합니다.
                     console.log(response.data);
                     alert('로그인 성공!');
+                    window.location.href = '/main';
                 })
                 .catch(error => {
                     // 요청이 실패했을 때 실행할 작업을 여기에 추가합니다.
