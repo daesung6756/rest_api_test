@@ -1,11 +1,15 @@
-const record = document.getElementById("record-input")
-const bulkDeKey = document.getElementById("bulk-de-input")
+const GenerateRecordInfo = document.getElementById("generateRecordInfo")
+const bulkRecord = document.getElementById("bulkRecordInput")
+const deKeyInput = document.getElementById("bulkDeInput")
 const chance = new Chance();
 
 // 숫자 유효성 검사
 function isValidNumber(number) {
-    return typeof number === 'number' && !isNaN(number);
+    console.log(number)
+    const valueRegex = /^-?\d*\.?\d+$/
+    return valueRegex.test(String(number));
 }
+
 // 이메일형식 유효성 검사
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -15,7 +19,7 @@ function isValidEmail(email) {
 function sendBulkDummyData(deKey) {
     if(deKey){
         try {
-            const response = axios.post("/sendRecords", dummyData, {
+            const response = axios.post("/sendRecords", {bulkDummyData, deKey}, {
                 headers: { 'Content-Type': 'application/json' }
             });
             console.log('Response:', response.data);
@@ -24,12 +28,37 @@ function sendBulkDummyData(deKey) {
             console.error('Error sending data to the server:', error);
             alert('Failed to send data to the server. Please try again later.');
         }
+    } else {
+        deKeyInput.focus()
+        alert("DE 외부키를 입력하세요.")
     }
 }
 
-// makeDummyData 함수를 호출하여 더미 데이터 생성
-function makeDummyData(record) {
+function sendSingleDummyData(deKey) {
+    deKey.trim()
+    if(deKey){
+        try {
+            const response = axios.post("/sendRecord", {singleDummyData, deKey}, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            console.log('Response:', response.data);
+            alert('Data successfully sent to the server!');
+        } catch (error) {
+            console.error('Error sending data to the server:', error);
+            alert('Failed to send data to the server. Please try again later.');
+        }
+    } else {
+        deKeyInput.focus()
+        alert("DE 외부키를 입력하세요.")
+    }
+}
+// makeBulkDummyData 함수를 호출하여 더미 데이터 생성
+function makeBulkDummyData(record) {
+    record.trim()
+
     if(!isValidNumber(record)) {
+        bulkRecord.value =""
+        bulkRecord.focus()
         alert("숫자만 입력하세요.")
         return;
     }
@@ -42,7 +71,7 @@ function makeDummyData(record) {
             const LastName = chance.last();
             const Phone = chance.phone();
 
-            dummyData.push({
+            bulkDummyData.push({
                 "ContactKey": ContactKey,
                 "EmailAddress": EmailAddress,
                 "FirstName": FirstName,
@@ -50,10 +79,36 @@ function makeDummyData(record) {
                 "Phone": Phone
             });
         }
-        console.log(dummyData)
+        dummyDataWriter(bulkDummyData)
     } else {
         alert("숫자를 입력하세요.")
     }
+}
+
+function makeSingleDummyData() {
+    const ContactKey = chance.guid();
+    const EmailAddress = chance.email();
+    const FirstName = chance.first();
+    const LastName = chance.last();
+    const Phone = chance.phone();
+
+    singleDummyData = {
+        "ContactKey": ContactKey,
+        "EmailAddress": EmailAddress,
+        "FirstName": FirstName,
+        "LastName": LastName,
+        "Phone": Phone
+    }
+    dummyDataWriter(singleDummyData)
+}
+
+function dummyDataWriter( obj ) {
+    GenerateRecordInfo.innerHTML = ""
+    const p = document.createElement("p")
+    const jsonString = JSON.stringify(obj,null, 2);
+    p.textContent = jsonString
+    GenerateRecordInfo.appendChild(p)
+
 }
 
 // utm tag 유/무 확인

@@ -1,2 +1,3 @@
-let dummyData = [];
+let bulkDummyData = [];
+let singleDummyData = {};
 let loginData = {};

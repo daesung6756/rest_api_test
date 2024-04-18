@@ -114,10 +114,4 @@ app.post('/sendRecords', async (req, res) => {
     }
 });
 
-//로그인 테스트
-app.get('/main', (req, res) => {
-    res.sendFile(__dirname + '/public/main.html');
-});
 
-const loginRouter = require('./public/assets/js/login');
-app.use('/', loginRouter);
