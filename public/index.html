@@ -32,6 +32,49 @@
 
     <script>
         include.loadScript()
+
+        const form = document.getElementById("signInForm")
+        form.addEventListener("submit", (e) => {
+            e.preventDefault()
+            const userId = document.getElementById("userId");
+            const userPassword = document.getElementById("userPassword");
+
+            if (!userId || !userPassword) {
+                console.error('userId 또는 userPassword 요소를 찾을 수 없습니다.');
+                return;
+            }
+
+            const email = userId.value.trim();
+            const password = userPassword.value.trim();
+
+            if (!email || !isValidEmail(email)) {
+                alert('올바른 이메일 주소를 입력하세요.');
+                return;
+            }
+
+            if (!password || password.length < 8) {
+                alert('비밀번호는 최소 8자 이상이어야 합니다.');
+                return;
+            }
+
+            const loginData = {
+                userId: email, // email이 userId로 사용될 수 있음
+                userPassword: password,
+                utmTag: isUtmTagExists() ? `utm_tag=${getUtmTagValue()}` : false
+            }
+
+            axios.post('/login', loginData)
+                .then(response => {
+                    // 서버로부터 응답을 받았을 때 실행할 작업을 여기에 추가합니다.
+                    console.log(response.data);
+                    alert('로그인 성공!');
+                })
+                .catch(error => {
+                    // 요청이 실패했을 때 실행할 작업을 여기에 추가합니다.
+                    console.error('로그인 요청 실패:', error);
+                    alert('로그인에 실패했습니다.');
+                });
+        });
     </script>
 </div>
 </body>
