@@ -15,14 +15,43 @@
     <!-- HEADER : END -->
 
     <div class="container">
-        <fieldset>
-            <input type="text" id="record-input" placeholder="더미데이터 생성 갯수를 입력하세요.">
-            <button type="button" onclick="makeDummyData(record.value)">BULK 더미데이터 생성</button>
-        </fieldset>
-        <fieldset>
-            <input type="text" id="bulk-de-input" placeholder="DE를 지정하세요.">
-            <button type="button" onclick="sendBulkDummyData(bulkDeKey.value)">DE 전송</button>
-        </fieldset>
+        <div class="content">
+
+
+
+            <div class="form-list-wrap">
+                <div id="generateRecordInfo" class="generate-records"></div>
+                <ul class="option-list">
+                    <li>
+                        <fieldset class="input-btn-field">
+                            <input type="text" id="bulkRecordInput" placeholder="더미데이터 생성 갯수를 입력하세요.">
+                            <button type="button" onclick="makeBulkDummyData(bulkRecord.value)">BULK 더미데이터 생성</button>
+                        </fieldset>
+                    </li>
+                    <li>
+                        <fieldset class="input-btn-field">
+                            <input type="text" id="bulkDeInput" placeholder="DE를 지정하세요.">
+                            <button type="button" onclick="sendBulkDummyData(deKeyInput.value)">BULK DE 전송</button>
+                        </fieldset>
+                    </li>
+                </ul>
+                <ul class="option-list">
+                    <li>
+                        <fieldset class="input-btn-field">
+                            <input type="text" id="" placeholder="싱글은 바로 버튼 누르세요." disabled>
+                            <button type="button" onclick="makeSingleDummyData()">SINGLE 더미데이터 생성</button>
+                        </fieldset>
+                    </li>
+                    <li>
+                        <fieldset class="input-btn-field">
+                            <input type="text" id="single-de-input" placeholder="DE를 지정하세요.">
+                            <button type="button" onclick="sendSingleDummyData(deKeyInput.value)">SINGLE DE 전송</button>
+                        </fieldset>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
     </div>
 
     <!-- FOOTER : START -->
