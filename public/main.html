@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <script src="./assets/js/include.js"></script>
+    <script>
+        include.head("main")
+    </script>
+</head>
+<body>
+
+<div class="wrap">
+
+    <!-- HEADER : START -->
+    <script>include.header()</script>
+    <!-- HEADER : END -->
+
+    <div class="container">
+        <fieldset>
+            <input type="text" id="record-input" placeholder="더미데이터 생성 갯수를 입력하세요.">
+            <button type="button" onclick="makeDummyData(record.value)">BULK 더미데이터 생성</button>
+        </fieldset>
+        <fieldset>
+            <input type="text" id="bulk-de-input" placeholder="DE를 지정하세요.">
+            <button type="button" onclick="sendBulkDummyData(bulkDeKey.value)">DE 전송</button>
+        </fieldset>
+    </div>
+
+    <!-- FOOTER : START -->
+    <script>include.footer()</script>
+    <!-- FOOTER : END -->
+
+    <script>
+        include.loadScript()
+    </script>
+</div>
+
+</body>
+</html>

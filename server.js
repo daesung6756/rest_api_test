@@ -10,7 +10,7 @@ const ACCOUNT_ID = process.env.ACCOUNT_ID;
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const SUB_DOMAIN = process.env.SUB_DOMAIN;
-const DATA_EXTENSION_EXTERNAL_KEY = process.env.DATA_EXTENSION_EXTERNAL_KEY
+let DATA_EXTENSION_EXTERNAL_KEY = null;
 const authUrl = `https://${SUB_DOMAIN}.auth.marketingcloudapis.com/v2/token`;
 
 app.use(cors());
@@ -75,7 +75,8 @@ async function getAccessToken() {
 
 const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/hub/v1/dataeventsasync/key:${DATA_EXTENSION_EXTERNAL_KEY}/rowset`;
 
-app.post('/test', async (req, res) => {
+app.post('/sendRecords', async (req, res) => {
+
     try {
         const accessToken = await getAccessToken(); // 액세스 토큰을 얻을 때까지 기다립니다.
         const users = req.body;

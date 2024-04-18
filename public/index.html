@@ -26,21 +26,12 @@
     </div>
     <!-- CONTAINER : END -->
 
-    <!-- HEADER : START -->
+    <!-- FOOTER : START -->
     <script>include.footer()</script>
-    <!-- HEADER : END -->
+    <!-- FOOTER : END -->
 
     <script>
         include.loadScript()
-
-        // container 높이 조절
-        window.addEventListener('load', function() {
-            const headerHeight = document.querySelector('.header').offsetHeight;
-            const footerHeight = document.querySelector('.footer').offsetHeight;
-            const container = document.querySelector('.container');
-            const calculatedHeight = window.innerHeight - (headerHeight + footerHeight);
-            container.style.minHeight = calculatedHeight + 'px';
-        });
     </script>
 </div>
 </body>
