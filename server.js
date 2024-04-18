@@ -10,6 +10,9 @@ const ACCOUNT_ID = process.env.ACCOUNT_ID;
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const SUB_DOMAIN = process.env.SUB_DOMAIN;
+const USER_ID = process.env.USER_ID;
+const USER_PASSWORD = process.env.USER_PASSWORD;
+
 let DATA_EXTENSION_EXTERNAL_KEY = null;
 const authUrl = `https://${SUB_DOMAIN}.auth.marketingcloudapis.com/v2/token`;
 
