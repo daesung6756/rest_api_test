@@ -76,7 +76,6 @@ async function getAccessToken() {
 const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/hub/v1/dataeventsasync/key:${DATA_EXTENSION_EXTERNAL_KEY}/rowset`;
 
 app.post('/test', async (req, res) => {
-
     try {
         const accessToken = await getAccessToken(); // 액세스 토큰을 얻을 때까지 기다립니다.
         const users = req.body;
@@ -105,6 +104,8 @@ app.post('/test', async (req, res) => {
             res.status(200).json({ message: '성공', response: responseData });
         } else if(response.status === 202) {
             res.status(202).json({ message: '잠시 대기중', response: responseData });
+        } else if(response.status === 413) {
+            res.status(413).json({ message: '레코드 갯수가 너무 많습니다. (최대 하루 5000개)', response: responseData });
         }
     } catch (error) {
         console.error('실패', error);

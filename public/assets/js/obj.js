@@ -1,0 +1,2 @@
+let dummyData = [];
+let loginData = {};

@@ -1,68 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="icon" type="image/png" href="./favicon.png">
-    <style>
-        fieldset {BORDER:0;}
-    </style>
+    <script src="./assets/js/include.js"></script>
+    <script>
+        include.head("로그인")
+    </script>
 </head>
 <body>
-<div>
-    <fieldset>
-        <input type="text" id="record-input" placeholder="더미데이터 생성 갯수를 입력하세요.">
-        <button type="button" onclick="makeDummyData(record.value)">더미데이터 생성</button>
-    </fieldset>
-    <fieldset>
-        <button type="button" onclick="sendDummyData()">DE 전송</button>
-    </fieldset>
-    <div id="tableContainer"></div>
+<div class="wrap">
+
+    <!-- HEADER : START -->
+    <script>include.header()</script>
+    <!-- HEADER : END -->
+
+    <!-- CONTAINER : START -->
+    <div class="container">
+        <div class="form-container">
+            <form method="post" id="signInForm">
+                <h1>Sign in</h1>
+                <input type="email" id="userId" name="userId" placeholder="Email" />
+                <input type="password" id="userPassword" name="userPassword" placeholder="Password" />
+                <button type="submit">Sign In</button>
+            </form>
+        </div>
+    </div>
+    <!-- CONTAINER : END -->
+
+    <!-- HEADER : START -->
+    <script>include.footer()</script>
+    <!-- HEADER : END -->
+
+    <script>
+        include.loadScript()
+
+        // container 높이 조절
+        window.addEventListener('load', function() {
+            const headerHeight = document.querySelector('.header').offsetHeight;
+            const footerHeight = document.querySelector('.footer').offsetHeight;
+            const container = document.querySelector('.container');
+            const calculatedHeight = window.innerHeight - (headerHeight + footerHeight);
+            container.style.minHeight = calculatedHeight + 'px';
+        });
+    </script>
 </div>
-<script src="./assets/js/vendor/axios.min.js"></script>
-<script src="./assets/js/vendor/chance.min.js"></script>
-<script>
-    let dummyData = [];
-    const record = document.getElementById("record-input")
-    const chance = new Chance();
-
-    function sendDummyData() {
-        try {
-            const response = axios.post("/test", dummyData, {
-                headers: { 'Content-Type': 'application/json' }
-            });
-            console.log('Response:', response.data);
-            alert('Data successfully sent to the server!');
-        } catch (error) {
-            console.error('Error sending data to the server:', error);
-            alert('Failed to send data to the server. Please try again later.');
-        }
-    }
-
-    // makeDummyData 함수를 호출하여 더미 데이터 생성
-    function makeDummyData(record) {
-        if(record){
-            for (let i = 0; i < record; i++) {
-                const ContactKey = chance.guid();
-                const EmailAddress = chance.email();
-                const FirstName = chance.first();
-                const LastName = chance.last();
-                const Phone = chance.phone();
-
-                dummyData.push({
-                    "ContactKey": ContactKey,
-                    "EmailAddress": EmailAddress,
-                    "FirstName": FirstName,
-                    "LastName": LastName,
-                    "Phone": Phone
-                });
-            }
-            console.log(dummyData)
-        } else {
-            alert("숫자를 입력하세요.")
-        }
-    }
-
-</script>
 </body>
 </html>
