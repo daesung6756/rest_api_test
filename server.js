@@ -2,6 +2,9 @@ require('dotenv').config()
 const express = require('express');
 const axios = require('axios');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const cookieSession = require("cookie-session");
 const app = express();
 const PORT = 3000;
 const cors = require('cors');
@@ -12,6 +15,7 @@ const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const SUB_DOMAIN = process.env.SUB_DOMAIN;
 const USER_ID = process.env.USER_ID;
 const USER_PASSWORD = process.env.USER_PASSWORD;
+const JSON_WEB_TOKEN = process.env.TOKEN;
 
 let DATA_EXTENSION_EXTERNAL_KEY = null;
 const authUrl = `https://${SUB_DOMAIN}.auth.marketingcloudapis.com/v2/token`;
@@ -22,6 +26,9 @@ app.use(express.static('public'));
 
 // Body parser middleware to handle post requests
 app.use(bodyParser.json());
+
+// 세션 데이터 암호화
+app.use(cookieSession({ name: "auth", keys: ["COOKIE_SECRET"], httpOnly: true }));
 
 // 기본 경로에 index.html 파일 제공
 app.get('/', (req, res) => {
@@ -117,4 +124,69 @@ app.post('/sendRecords', async (req, res) => {
     }
 });
 
+
+//로그인 기능
+app.post('/login', async(req, res) => {
+
+    try {
+        const { userId, userPassword, utmTag } = req.body;
+
+        //아이디 확인
+        const IdMatch = (USER_ID == userId);
+        if(!IdMatch) {
+            return res.status(401).send('아이디를 확인해주세요.');
+        }
+
+        //비밀번호 확인
+        const passwordMatch = bcrypt.compareSync(userPassword, USER_PASSWORD);
+        if(passwordMatch) {
+            const jsonWebToken = jwt.sign({ id: userId },
+                                            JSON_WEB_TOKEN,
+                                            {
+                                                algorithm: 'HS256',
+                                                allowInsecureKeySizes: true,
+                                                expiresIn: 86400, // 24H
+                                            });
+            
+            req.session.token = jsonWebToken;
+            req.session.utmTag = utmTag;
+
+            return res.redirect('/main');
+        } else {
+            return res.status(401).send('비밀번호를 확인해주세요.');
+        }
+    } catch(error) {
+        res.status(500).json({ message: '로그인 시도 중 문제가 생겼습니다.', error: error.message });
+    }
+
+});
+
+//토큰 검증
+const verifyToken = (req, res, next) => {
+    const jsonWebToken = req.session.token;
+
+    if (!jsonWebToken) {
+        return res.status(403).send({
+            message: "토큰 검증 실패 !!",
+        });
+    }
+
+    jwt.verify(jsonWebToken, JSON_WEB_TOKEN, (err, decoded) => {
+        if (err) {
+            return res.status(401).send({
+                message: "토큰 검증 실패 !!",
+            });
+        }
+        next();
+    });
+};
+
+//JWT가 존재하는 유저만 main 페이지로 이동
+app.get('/main', verifyToken, (req, res) => {
+
+    console.log(req.session.token);
+    console.log(req.session.utmTag);
+    res.sendFile(__dirname + '/public/main.html');
+
+});
 
