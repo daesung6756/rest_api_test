@@ -4,11 +4,11 @@
 
 * {box-sizing: border-box;}
 h1 {font-weight: bold;margin: 0;}
-p {font-size: 14px;font-weight: 100;line-height: 20px;letter-spacing: 0.5px;margin: 20px 0 30px;}
 span {font-size: 12px;}
 a {color: #333;font-size: 14px;text-decoration: none;margin: 15px 0;}
 input {background-color: #eee;border: none;padding: 12px 15px;margin: 8px 0;width: 100%;}
 input[disabled] {background:#aaa;}
+button {cursor:pointer}
 ::-webkit-scrollbar {width: 12px; /* 스크롤바의 너비 */height: 12px; /* 가로 스크롤바의 높이 */}
 ::-webkit-scrollbar-thumb {background-color: #888; /* 색상 */border-radius: 6px; /* 둥근 모서리 */}
 ::-webkit-scrollbar-thumb:hover {background-color: #555;}

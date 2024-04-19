@@ -138,7 +138,7 @@ app.post('/sendRecords', async (req, res) => {
 app.post('/sendApiEvent', async (req, res) => {
     try {
         const accessToken = await getAccessToken(); // 액세스 토큰을 얻을 때까지 기다립니다.
-        const {ContactKey, EmailAddress, FirstName, LastName, Phone } = req.body.singleApiEventData;
+        const { ContactKey, EmailAddress, FirstName, LastName, Phone } = req.body.singleApiEventData;
 
         EVENT_DEFINITION_KEY = req.body.apiKey;
 
@@ -146,15 +146,15 @@ app.post('/sendApiEvent', async (req, res) => {
             "ContactKey": ContactKey,
             "EventDefinitionKey": EVENT_DEFINITION_KEY,
             "Data": {
+                "SubscriberKey": ContactKey,
                 "EmailAddress": EmailAddress,
                 "FirstName": FirstName,
                 "LastName": LastName,
                 "Phone": Phone,
-                "SubscriberKey": ContactKey
             }
         };
 
-        const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/interaction/v1/events`;
+        const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/interaction/v1/eventDefinition`;
 
         const config = {
             headers: {
@@ -167,7 +167,7 @@ app.post('/sendApiEvent', async (req, res) => {
         const responseData = response.data;
 
         if (response.status === 200 || response.status === 201) {
-            res.status(200).json({ message: '성공', response: responseData });
+            res.status(200 || 201).json({ message: '성공', response: responseData });
         } else if (response.status === 202) {
             res.status(202).json({ message: '잠시 대기중', response: responseData });
         }
