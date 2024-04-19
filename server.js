@@ -18,6 +18,7 @@ const USER_PASSWORD = process.env.USER_PASSWORD;
 const JSON_WEB_TOKEN = process.env.TOKEN;
 
 let DATA_EXTENSION_EXTERNAL_KEY = null;
+let EVENT_DEFINITION_KEY = null;
 const authUrl = `https://${SUB_DOMAIN}.auth.marketingcloudapis.com/v2/token`;
 
 app.use(cors());
@@ -83,13 +84,11 @@ async function getAccessToken() {
 }
 
 
-const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/hub/v1/dataeventsasync/key:${DATA_EXTENSION_EXTERNAL_KEY}/rowset`;
-
+// DE
 app.post('/sendRecords', async (req, res) => {
-
     try {
         const accessToken = await getAccessToken(); // 액세스 토큰을 얻을 때까지 기다립니다.
-        const users = req.body;
+        const users = req.body.bulkDummyData;
         const data = users.map(user => ({
             "keys": {
                 "ContactKey": user.ContactKey
@@ -101,6 +100,11 @@ app.post('/sendRecords', async (req, res) => {
                 "Phone": user.Phone
             }
         }));
+
+        DATA_EXTENSION_EXTERNAL_KEY = req.body.deKey
+
+        const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/hub/v1/dataeventsasync/key:${DATA_EXTENSION_EXTERNAL_KEY}/rowset`;
+
         const config = {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -123,6 +127,48 @@ app.post('/sendRecords', async (req, res) => {
         res.status(500).json({ message: '실패입니다.', error: error.message });
     }
 });
+
+// API EVENT (ENTRY)
+app.post('/sendApiEvent', async (req, res) => {
+    try {
+        const accessToken = await getAccessToken(); // 액세스 토큰을 얻을 때까지 기다립니다.
+        const user = req.body.singleApiEventData;
+
+        EVENT_DEFINITION_KEY = req.body.apiKey
+
+        const data = {
+            "ContactKey": user.ContactKey,
+            "EventDefinitionKey": EVENT_DEFINITION_KEY,
+            "data": {
+                "EmailAddress": user.EmailAddress,
+                "FirstName": user.FirstName,
+                "LastName": user.LastName,
+                "Phone": user.Phone
+            }
+        };
+
+        const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/interaction/v1/events`
+
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const response = await axios.post(endpoint, data, config);
+        const responseData = response.data;
+
+        if (response.status === 200) {
+            res.status(200).json({ message: '성공', response: responseData });
+        } else if(response.status === 202) {
+            res.status(202).json({ message: '잠시 대기중', response: responseData });
+        }
+    } catch (error) {
+        console.error('실패', error);
+        res.status(500).json({ message: '실패입니다.', error: error.message });
+    }
+})
 
 
 //로그인 기능

@@ -1,6 +1,7 @@
 const GenerateRecordInfo = document.getElementById("generateRecordInfo")
 const bulkRecord = document.getElementById("bulkRecordInput")
 const deKeyInput = document.getElementById("bulkDeInput")
+const apiEventInput = document.getElementById("singleApiEventInput")
 const chance = new Chance();
 
 // 숫자 유효성 검사
@@ -17,7 +18,8 @@ function isValidEmail(email) {
 }
 
 function sendBulkDummyData(deKey) {
-    if(deKey){
+    deKey.trim()
+    if(deKey.length === 36){
         try {
             const response = axios.post("/sendRecords", {bulkDummyData, deKey}, {
                 headers: { 'Content-Type': 'application/json' }
@@ -34,14 +36,14 @@ function sendBulkDummyData(deKey) {
     }
 }
 
-function sendSingleDummyData(deKey) {
-    deKey.trim()
-    if(deKey){
+function sendApiEventData(apiKey) {
+    apiKey.trim()
+    if(apiKey.length === 45){
         try {
-            const response = axios.post("/sendRecord", {singleDummyData, deKey}, {
+            const response = axios.post("/sendApiEvent", {singleApiEventData, apiKey}, {
                 headers: { 'Content-Type': 'application/json' }
             });
-            console.log('Response:', response.data);
+            console.log('Response:', response);
             alert('Data successfully sent to the server!');
         } catch (error) {
             console.error('Error sending data to the server:', error);
@@ -92,14 +94,14 @@ function makeSingleDummyData() {
     const LastName = chance.last();
     const Phone = chance.phone();
 
-    singleDummyData = {
+    singleApiEventData = {
         "ContactKey": ContactKey,
         "EmailAddress": EmailAddress,
         "FirstName": FirstName,
         "LastName": LastName,
         "Phone": Phone
     }
-    dummyDataWriter(singleDummyData)
+    dummyDataWriter(singleApiEventData)
 }
 
 function dummyDataWriter( obj ) {

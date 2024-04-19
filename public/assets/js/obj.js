@@ -1,3 +1,3 @@
 let bulkDummyData = [];
-let singleDummyData = {};
+let singleApiEventData = {};
 let loginData = {};
