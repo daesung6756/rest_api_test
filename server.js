@@ -152,7 +152,7 @@ app.post('/sendApiEvent', async (req, res) => {
                 "LastName": LastName,
                 "Phone": Phone,
             }
-        };
+        }
 
         const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/interaction/v1/eventDefinition`;
 
