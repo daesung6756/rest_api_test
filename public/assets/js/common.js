@@ -2,6 +2,7 @@ const GenerateRecordInfo = document.getElementById("generateRecordInfo")
 const bulkRecord = document.getElementById("bulkRecordInput")
 const deKeyInput = document.getElementById("bulkDeInput")
 const apiEventInput = document.getElementById("singleApiEventInput")
+const loader = document.getElementById("loader");
 const chance = new Chance();
 
 // 숫자 유효성 검사
@@ -114,6 +115,69 @@ function dummyDataWriter( obj ) {
     GenerateRecordInfo.appendChild(p)
 
 }
+async function login() {
+    loadingEvent(900)
+    const userId = document.getElementById("userId");
+    const userPassword = document.getElementById("userPassword");
+
+    if (!userId || !userPassword) {
+        console.error('userId 또는 userPassword 요소를 찾을 수 없습니다.');
+        return;
+    }
+
+    const email = userId.value.trim();
+    const password = userPassword.value.trim();
+
+    if (!email || !isValidEmail(email)) {
+        alert('올바른 이메일 주소를 입력하세요.');
+        return;
+    }
+
+    if (!password || password.length < 8) {
+        alert('비밀번호는 최소 8자 이상이어야 합니다.');
+        return;
+    }
+
+    const loginData = {
+        userId: email, // email이 userId로 사용될 수 있음
+        userPassword: password,
+        utmTag: isUtmTagExists() ? `utm_tag=${getUtmTagValue()}` : false
+    }
+
+    axios.post('/login', loginData)
+        .then(response => {
+            // 서버로부터 응답을 받았을 때 실행할 작업을 여기에 추가합니다.
+            console.log(response.data);
+            alert("로그인에 성공했습니다.")
+            window.location.href = '/main';
+        })
+        .catch(error => {
+            // 요청이 실패했을 때 실행할 작업을 여기에 추가합니다.
+            console.error('로그인 요청 실패:', error);
+            alert('로그인에 실패했습니다.');
+        });
+}
+async function logout() {
+    try {
+        // 백엔드 로그아웃 엔드포인트로 POST 요청 보내기
+        const response = await axios.post('/logout', {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        // 요청 처리 결과 확인
+        if (response.status === 200) {
+            // 로그아웃이 성공하면 로그인 페이지로 리디렉션
+            window.location.href = '/';
+        } else {
+            // 로그아웃 실패 시 오류 메시지 출력
+            console.error('로그아웃 실패:', response.data.message);
+        }
+    } catch (error) {
+        console.error('로그아웃 중 에러 발생:', error);
+    }
+}
 
 // utm tag 유/무 확인
 function isUtmTagExists() {
@@ -126,6 +190,15 @@ function getUtmTagValue() {
     return urlParams.get('utm_tag').trim();
 }
 
+function loadingEvent (second) {
+    loader.classList.add("is-show")
+    const loadingTimer = setTimeout(() => {
+        loader.classList.remove("is-show")
+        clearTimeout(loadingTimer)
+    }, second)
+
+}
+
 // container 높이 조절
 window.addEventListener('load', function() {
     const headerHeight = document.querySelector('.header').offsetHeight;
@@ -133,4 +206,6 @@ window.addEventListener('load', function() {
     const container = document.querySelector('.container');
     const calculatedHeight = window.innerHeight - (headerHeight + footerHeight);
     container.style.minHeight = calculatedHeight + 'px';
+
+    loadingEvent(900)
 });

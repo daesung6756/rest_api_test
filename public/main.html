@@ -7,7 +7,7 @@
     </script>
 </head>
 <body>
-
+<script>include.loader()</script>
 <div class="wrap">
 
     <!-- HEADER : START -->
@@ -61,6 +61,13 @@
 
     <script>
         include.loadScript()
+        const logoutButton = document.createElement("button")
+        logoutButton.classList.add("logout-button")
+        logoutButton.textContent = "LOGOUT"
+        document.getElementById("header").appendChild(logoutButton)
+        logoutButton.addEventListener("click", () => {
+            logout()
+        })
     </script>
 </div>
 

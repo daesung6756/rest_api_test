@@ -19,6 +19,7 @@ const JSON_WEB_TOKEN = process.env.TOKEN;
 
 let DATA_EXTENSION_EXTERNAL_KEY = null;
 let EVENT_DEFINITION_KEY = null;
+
 const authUrl = `https://${SUB_DOMAIN}.auth.marketingcloudapis.com/v2/token`;
 
 app.use(cors());
@@ -154,12 +155,12 @@ app.post('/sendApiEvent', async (req, res) => {
             }
         }
 
-        const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/interaction/v1/eventDefinition`;
+        const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/interaction/v1/events`;
 
         const config = {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             }
         };
 
@@ -207,7 +208,7 @@ app.post('/login', async(req, res) => {
             req.session.token = jsonWebToken;
             req.session.utmTag = utmTag;
 
-            return res.redirect('/main');
+            return res.status(200).redirect('/main');
         } else {
             return res.status(401).send('비밀번호를 확인해주세요.');
         }
@@ -244,5 +245,25 @@ app.get('/main', verifyToken, (req, res) => {
     console.log(req.session.utmTag);
     res.sendFile(__dirname + '/public/main.html');
 
+});
+
+app.post('/logout', (req, res) => {
+    // 세션 파기
+    req.session.destroy((err) => {
+        if (err) {
+            // 세션 파기 실패 시
+            console.error('로그아웃 처리 중 문제가 생겼습니다:', err);
+            return res.status(500).json({
+                message: '로그아웃 처리 중 문제가 생겼습니다.',
+                error: err.message,
+            });
+        }
+        // 세션 파기 성공 시
+        console.log('로그아웃 성공');
+        res.status(200).send('로그아웃되었습니다.');
+
+        // 선택 사항: 로그인 페이지로 리디렉션
+        // res.redirect('/login');
+    });
 });
 

@@ -17,6 +17,9 @@ button {cursor:pointer}
 html,
 body,
 .wrap {width:100%;height:100%}
+.loader {display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:rgba(0,0,0,.3);z-index:9999;}
+.loader.is-show {display:block}
+.loader .spinner {position:relative;width:100%;height:100vh;display:flex;align-items:center;justify-content:center;}
 .header {background-color: var(--background-dark-default);color:#fff;padding:20px 10px;}
 .header .inner {max-width:1200px;margin:0 auto;}
 .container {display:flex;align-items: center;justify-content: center;background:#efefef;}

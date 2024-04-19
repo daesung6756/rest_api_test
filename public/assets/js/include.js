@@ -26,6 +26,12 @@ const include = {
        document.write(`<P>copyright@ds,ms,yi</P>`)
        document.write(`</div>`)
        document.write(`</footer>`)
+    },
+    loader : function () {
+       document.write(`<div id="loader" class='loader'><div class='spinner'><img src="./assets/images/svg/Spin@1x-1.0s-200px-200px.svg"></div></div>`)
+    },
+    popup : function () {
+
     }
 }
 
