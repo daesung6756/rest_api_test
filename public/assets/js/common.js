@@ -49,9 +49,11 @@ function sendApiEventData(apiKey) {
             console.error('Error sending data to the server:', error);
             alert('Failed to send data to the server. Please try again later.');
         }
+    } else if (Object.keys(singleApiEventData).length === 0){
+        alert("데이터를 생성하세요.")
     } else {
-        deKeyInput.focus()
-        alert("DE 외부키를 입력하세요.")
+        apiEventInput.focus()
+        alert("API 키가 올바르지 않거나 값이 없습니다.")
     }
 }
 // makeBulkDummyData 함수를 호출하여 더미 데이터 생성

@@ -138,22 +138,23 @@ app.post('/sendRecords', async (req, res) => {
 app.post('/sendApiEvent', async (req, res) => {
     try {
         const accessToken = await getAccessToken(); // 액세스 토큰을 얻을 때까지 기다립니다.
-        const user = req.body.singleApiEventData;
+        const {ContactKey, EmailAddress, FirstName, LastName, Phone } = req.body.singleApiEventData;
 
-        EVENT_DEFINITION_KEY = req.body.apiKey
+        EVENT_DEFINITION_KEY = req.body.apiKey;
 
         const data = {
-            "ContactKey": user.ContactKey,
+            "ContactKey": ContactKey,
             "EventDefinitionKey": EVENT_DEFINITION_KEY,
-            "data": {
-                "EmailAddress": user.EmailAddress,
-                "FirstName": user.FirstName,
-                "LastName": user.LastName,
-                "Phone": user.Phone
+            "Data": {
+                "EmailAddress": EmailAddress,
+                "FirstName": FirstName,
+                "LastName": LastName,
+                "Phone": Phone,
+                "SubscriberKey": ContactKey
             }
         };
 
-        const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/interaction/v1/events`
+        const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/interaction/v1/events`;
 
         const config = {
             headers: {
@@ -165,16 +166,19 @@ app.post('/sendApiEvent', async (req, res) => {
         const response = await axios.post(endpoint, data, config);
         const responseData = response.data;
 
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 201) {
             res.status(200).json({ message: '성공', response: responseData });
-        } else if(response.status === 202) {
+        } else if (response.status === 202) {
             res.status(202).json({ message: '잠시 대기중', response: responseData });
         }
     } catch (error) {
-        console.error('실패', error);
-        res.status(500).json({ message: '실패입니다.', error: error.message });
+        console.error('에러 코드:', error.response?.status);
+        console.error('에러 메시지:', error.message);
+        console.error('API 응답 데이터:', error.response?.data);
+
+        res.status(error.response?.status || 500).json({ message: '실패입니다.', error: error.message});
     }
-})
+});
 
 
 //로그인 기능
