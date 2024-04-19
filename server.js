@@ -22,6 +22,12 @@ let EVENT_DEFINITION_KEY = null;
 const authUrl = `https://${SUB_DOMAIN}.auth.marketingcloudapis.com/v2/token`;
 
 app.use(cors());
+
+// html파일에 직접 접근 거부
+app.use('/main.html', (req, res) => {
+    return res.redirect('/main');
+});
+
 // 정적 파일을 제공할 폴더 설정
 app.use(express.static('public'));
 
