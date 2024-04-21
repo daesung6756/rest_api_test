@@ -7,31 +7,33 @@ const include = {
         document.write(`<link rel="stylesheet" href="./assets/css/reset.css">`)
         document.write(`<link rel="stylesheet" href="./assets/css/common.css">`)
     },
-    loadScript : function () {
-        document.write(`<script src="./assets/js/vendor/axios.min.js"></script>`)
-        document.write(`<script src="./assets/js/vendor/chance.min.js"></script>`)
-        document.write(`<script src="./assets/js/obj.js"></script>`)
-        document.write(`<script src="./assets/js/common.js"></script>`)
-    },
-    header : function () {
+    header : function (isLogged = false) {
         document.write(`<header id="header" class="header">`)
-        document.write(`<div class = "inner" >`)
-        document.write(`DKBMC MC사업부 generator v0.1.`)
+        document.write(`<div class="inner">`)
+        document.write(`<h1 class="title">SFMC용 Generator Set v0.1</h1>`)
+        if(isLogged) {
+            document.write(`<button type="button" id="logout" class="logout bg-orange">LOGOUT</button>`)
+        }
         document.write(`</div>`)
         document.write(`</header>`)
     },
     footer : function () {
        document.write(`<footer id="footer" class="footer">`)
        document.write(`<div class="inner">`)
-       document.write(`<P>copyright@ds,ms,yi</P>`)
+       document.write(`<p>© MC 2024. All rights reserved.<br>Produced by : DS.LEE, MS.NAM, YI.CHO</p>`)
        document.write(`</div>`)
        document.write(`</footer>`)
     },
     loader : function () {
-       document.write(`<div id="loader" class='loader'><div class='spinner'><img src="./assets/images/svg/Spin@1x-1.0s-200px-200px.svg"></div></div>`)
+       document.write(`<div id="loader" class='loader'><div class='spinner'><img src="./assets/images/svg/pulse.svg"></div></div>`)
     },
-    popup : function () {
-
-    }
+    loadScript : function (isLogged  = false) {
+        document.write(`<script src="./assets/js/vendor/axios.min.js"></script>`)
+        document.write(`<script src="./assets/js/vendor/chance.min.js"></script>`)
+        if(isLogged) {
+            document.write(`<script src="./assets/js/create-obj.js"></script>`)
+        }
+        document.write(`<script src="./assets/js/common.js"></script>`)
+    },
 }
 

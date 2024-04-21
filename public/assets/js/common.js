@@ -4,6 +4,7 @@ const deKeyInput = document.getElementById("bulkDeInput")
 const apiEventInput = document.getElementById("singleApiEventInput")
 const loader = document.getElementById("loader");
 const chance = new Chance();
+const form = document.getElementById("signInForm")
 
 // 숫자 유효성 검사
 function isValidNumber(number) {
@@ -109,10 +110,8 @@ function makeSingleDummyData() {
 
 function dummyDataWriter( obj ) {
     GenerateRecordInfo.innerHTML = ""
-    const p = document.createElement("p")
     const jsonString = JSON.stringify(obj,null, 2);
-    p.textContent = jsonString
-    GenerateRecordInfo.appendChild(p)
+    GenerateRecordInfo.value =  jsonString;
 
 }
 async function login() {
@@ -198,14 +197,33 @@ function loadingEvent (second) {
     }, second)
 
 }
+const commonFunc = {
+    toggle : function (elem , className){
+        elem.classList.toggle(className)
+    },
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+
+    if(form){
+        form.addEventListener("submit", (e) => {
+            e.preventDefault()
+            login()
+        });
+    }
+})
 
 // container 높이 조절
 window.addEventListener('load', function() {
-    const headerHeight = document.querySelector('.header').offsetHeight;
-    const footerHeight = document.querySelector('.footer').offsetHeight;
+    const headerHeight = document.querySelector('.header').clientHeight;
+    const footerHeight = document.querySelector('.footer').clientHeight;
     const container = document.querySelector('.container');
-    const calculatedHeight = window.innerHeight - (headerHeight + footerHeight);
+    const content = document.querySelector('.content');
+    const calculatedHeight = window.innerHeight - (headerHeight + footerHeight + 41);
+
     container.style.minHeight = calculatedHeight + 'px';
+    if(content.classList.contains("is-center")) content.style.minHeight = calculatedHeight + 'px';
 
     loadingEvent(900)
 });

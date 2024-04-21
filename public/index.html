@@ -16,13 +16,22 @@
 
     <!-- CONTAINER : START -->
     <div class="container">
-        <div class="form-container">
-            <form method="post" id="signInForm">
-                <h1>Sign in</h1>
-                <input type="email" id="userId" name="userId" placeholder="Email" />
-                <input type="password" id="userPassword" name="userPassword" placeholder="Password" />
-                <button type="submit" class="sign-button">Sign In</button>
-            </form>
+        <div class="content is-center">
+
+            <div class="form-container">
+                <form method="post" id="signInForm">
+                    <fieldset class="text-field">
+                        <label for="userId">아이디</label>
+                        <input type="email" id="userId" name="userId" required placeholder="Email을 입력하세요." />
+                    </fieldset>
+                    <fieldset class="text-field">
+                        <label for="userPassword">비밀번호</label>
+                        <input type="password" id="userPassword" name="userPassword" required placeholder="Password를 입력하세요." />
+                    </fieldset>
+                    <button type="submit" class="sign-in-btn">Sign In</button>
+                </form>
+            </div>
+
         </div>
     </div>
     <!-- CONTAINER : END -->
@@ -31,18 +40,10 @@
     <script>include.footer()</script>
     <!-- FOOTER : END -->
 
-    <script>
-        include.loadScript()
 
-        const form = document.getElementById("signInForm")
-        form.addEventListener("submit", (e) => {
-            e.preventDefault()
-            login()
-        });
-    </script>
 </div>
 <script>
-    include.popup()
+    include.loadScript()
 </script>
 </body>
 </html>

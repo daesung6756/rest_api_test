@@ -11,47 +11,95 @@
 <div class="wrap">
 
     <!-- HEADER : START -->
-    <script>include.header()</script>
+    <script>include.header(true)</script>
     <!-- HEADER : END -->
 
     <div class="container">
         <div class="content">
 
+            <section class="section dummy-data-wrap">
+                <h2 class="title">더미데이터 생성기 v0.1</h2>
+                <div class="flex-wrap al-s jc-sb g20">
+                    <div class="column n2">
+                        <ul class="dummy-data-create-list">
+                            <li class="step">
+                                <h3 class="title">- 최종 결과</h3>
+                                <div class="output-options-wrap">
+                                    <button type="button" id="resetDummyData"  onclick="resetDummyData()">초기화</button>
+                                    <button type="button" id="exportCsvDummyData"  onclick="exportCsvDummyData()">CSV</button>
+                                    <button type="button" id="clipboardCopyDummyData"  onclick="clipboardCopyDummyData()">Copy</button>
+                                </div>
+                                <textarea id="dummyData" class="display-dummy-data" ></textarea>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="column n2">
+                        <ul class="dummy-data-create-list">
+                            <li class="step">
+                                <h3 class="title">- 데이터 셋팅</h3>
+                                <div id="displayMyObjectSetting" class="display-dummy-data-setting"><pre>{}</pre></div>
+                                <p class="desc">* 셋팅된 더미데이터 형태를 볼 수 있습니다.</p>
+                            </li>
+                            <li class="step">
+                                <h3 class="title">- 속성 추가</h3>
+                                <div>
+                                    <button type="button" id="add-property">Add Property</button>
+                                </div>
+                            </li>
+                            <li class="step">
+                                <ul id="add-property-group" class="add-property-list"></ul>
+                                <p class="desc">* Key 와 value 값은 한번 설정하면 수정이 불가합니다.</p>
+                            </li>
+                            <li class="step">
+                                <h3 class="title">- 데이터 생성 갯수 지정</h3>
+                                <fieldset class="input-btn-field">
+                                    <input type="text" id="data-length" placeholder="생성할 객체 갯수를 입력하세요.">
+                                    <button type="button" id="create-data" class="create-data-button bg-olive-green" onclick="createData()">생성</button>
+                                </fieldset>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
 
-
-            <div class="form-list-wrap">
-                <div id="generateRecordInfo" class="generate-records"></div>
-                <ul class="option-list">
-                    <li>
-                        <fieldset class="input-btn-field">
-                            <input type="text" id="bulkRecordInput" placeholder="더미데이터 생성 갯수를 입력하세요.">
-                            <button type="button" onclick="makeBulkDummyData(bulkRecord.value)">BULK 더미 생성</button>
-                        </fieldset>
-                    </li>
-                    <li>
-                        <fieldset class="input-btn-field">
-                            <input type="text" id="bulkDeInput" placeholder="DE를 지정하세요.">
-                            <button type="button" onclick="sendBulkDummyData(deKeyInput.value)">BULK DE 전송</button>
-                        </fieldset>
-                    </li>
-
-                </ul>
-                <ul class="option-list">
-                    <li>
-                        <fieldset class="input-btn-field">
-                            <input type="text" id="" placeholder="싱글은 바로 버튼 누르세요." disabled style="visibility:hidden">
-                            <button type="button" onclick="makeSingleDummyData()">SINGLE 더미 생성</button>
-                        </fieldset>
-                    </li>
-                    <li>
-                        <fieldset class="input-btn-field">
-                            <input type="text" id="singleApiEventInput" placeholder="API KEY를 입력하세요.">
-                            <button type="button" onclick="sendApiEventData(apiEventInput.value)">API EVENT ENTRY 전송</button>
-                        </fieldset>
-                    </li>
-                </ul>
-            </div>
-
+            <section class="section mce-send-wrap">
+                <h2 class="title">MCE DE, API EVENT DATA REST API v0.1</h2>
+                <div class="flex-wrap al-s jc-sb g20">
+                    <div class="column n2">
+                        <textarea id="generateRecordInfo" class="display-dummy-data"></textarea>
+                    </div>
+                    <div class="column n2">
+                        <ul class="dummy-data-create-list">
+                            <li>
+                                <fieldset class="input-btn-field">
+                                    <input type="text" id="bulkRecordInput" placeholder="더미데이터 생성 갯수를 입력하세요.">
+                                    <button type="button" onClick="makeBulkDummyData(bulkRecord.value)">BULK 더미 생성</button>
+                                </fieldset>
+                            </li>
+                            <li>
+                                <fieldset class="input-btn-field">
+                                    <input type="text" id="bulkDeInput" placeholder="DE를 지정하세요.">
+                                    <button type="button" onClick="sendBulkDummyData(deKeyInput.value)">BULK DE 전송</button>
+                                </fieldset>
+                            </li>
+                        </ul>
+                        <ul class="dummy-data-create-list">
+                            <li>
+                                <fieldset class="input-btn-field">
+                                    <input type="text" id="" placeholder="싱글은 바로 버튼 누르세요." disabled style="visibility:hidden">
+                                    <button type="button" onClick="makeSingleDummyData()">SINGLE 더미 생성</button>
+                                </fieldset>
+                            </li>
+                            <li>
+                                <fieldset class="input-btn-field">
+                                    <input type="text" id="singleApiEventInput" placeholder="API KEY를 입력하세요.">
+                                    <button type="button" onClick="sendApiEventData(apiEventInput.value)">API EVENT 전송</button>
+                                </fieldset>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
@@ -59,17 +107,7 @@
     <script>include.footer()</script>
     <!-- FOOTER : END -->
 
-    <script>
-        include.loadScript()
-        const logoutButton = document.createElement("button")
-        logoutButton.classList.add("logout-button")
-        logoutButton.textContent = "LOGOUT"
-        document.getElementById("header").appendChild(logoutButton)
-        logoutButton.addEventListener("click", () => {
-            logout()
-        })
-    </script>
 </div>
-
+<script> include.loadScript(true)</script>
 </body>
 </html>

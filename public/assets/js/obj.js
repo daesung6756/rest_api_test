@@ -1,2 +1,0 @@
-let bulkDummyData = [];
-let singleApiEventData = {};
