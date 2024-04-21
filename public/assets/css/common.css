@@ -73,6 +73,7 @@ body,
 .input-btn-field > button {width:240px;height:40px}
 .dummy-data-wrap .desc {margin-top:10px;font-size:12px;line-height:18px;color:#333;}
 .dummy-data-wrap textarea {margin-top:10px;}
+.dummy-data-wrap .add-property-list{max-height:300px;overflow: hidden;overflow-y:auto;}
 .dummy-data-wrap .add-property-list li {display:flex;align-items: center;justify-content: space-between;gap:10px;}
 .dummy-data-wrap .remove-btn {min-width:60px;height:40px;border:0;background:#333;color:#fff;}
 .dummy-data-wrap .output-options-wrap {display:flex;align-items: center;justify-content: flex-end;gap:10px;}
@@ -83,6 +84,7 @@ body,
 .display-dummy-data-setting,
 .display-dummy-data {width:100%;border-radius:20px;padding:14px;font-size:16px;line-height:22px;background:var(--background-inner-box-default);color:var(--font-color-inner-box-default);}
 .display-dummy-data {height:300px;resize: none;}
+.dummy-data-create-list {}
 .dummy-data-create-list li {padding:10px 0;}
 .dummy-data-create-list li + li {border-bottom:1px dotted #ddd;}
 
