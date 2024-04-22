@@ -20,62 +20,34 @@
             <section class="section dummy-data-wrap">
                 <h2 class="title">UTM_TAG REST API TEST <button type="button" class="toggle-btn" data-toggle="section0">열기</button></h2>
                 <div class="toggle-panel" data-toggle-panel="section0">
-                    <div>
-                        <p>UTM_TAG : <span id="utmTagStatus"></span></p>
-                        <p>REST API Status : <span></span></p>
-                    </div>
+                    <ul class="utm-tag-view-list">
+                        <li>- UTM_TAG : <span id="utmTagStatus"></span></li>
+                        <li>- 추적할 데이터
+                            <fieldset>
+                                <select>
+                                    <option value="">출발지</option>
+                                    <option value="서울">서울</option>
+                                    <option value="부산">부산</option>
+                                    <option value="대구">대구</option>
+                                    <option value="대전">대전</option>
+                                    <option value="광주">광주</option>
+                                </select>
+                                <select>
+                                    <option value="">목적지</option>
+                                    <option value="서울">서울</option>
+                                    <option value="부산">부산</option>
+                                    <option value="대구">대구</option>
+                                    <option value="대전">대전</option>
+                                    <option value="광주">광주</option>
+                                </select>
+                                <button>검색</button>
+                            </fieldset>
+                        </li>
+                    </ul>
                 </div>
             </section>
             <!-- //UTM_TAG REST API TEST : START -->
 
-            <!-- 더미데이터 생성기 v0.1 : START -->
-            <section class="section dummy-data-wrap">
-                <h2 class="title">더미데이터 생성기 v0.1 <button type="button" class="toggle-btn" data-toggle="section1">열기</button></h2>
-                <div class="toggle-panel" data-toggle-panel="section1">
-                    <div class="flex-wrap al-s jc-sb g20">
-                    <div class="column n2">
-                        <ul class="dummy-data-create-list">
-                            <li class="step">
-                                <h3 class="title">- 데이터 생성 갯수 지정</h3>
-                                <fieldset class="input-btn-field">
-                                    <input type="text" id="data-length" placeholder="생성할 객체 갯수를 입력하세요.">
-                                    <button type="button" id="create-data" class="create-data-button bg-olive-green" onclick="createData()">생성</button>
-                                </fieldset>
-                            </li>
-                            <li class="step">
-                                <h3 class="title">- 최종 결과</h3>
-                                <div class="output-options-wrap">
-                                    <button type="button" id="resetDummyData"  onclick="resetDummyData()">초기화</button>
-                                    <button type="button" id="exportCsvDummyData"  onclick="exportCsvDummyData()">CSV</button>
-                                    <button type="button" id="clipboardCopyDummyData"  onclick="clipboardCopyDummyData()">Copy</button>
-                                </div>
-                                <textarea id="dummyData" class="display-dummy-data" ></textarea>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="column n2">
-                        <ul class="dummy-data-create-list">
-                            <li class="step">
-                                <h3 class="title">- 데이터 셋팅</h3>
-                                <div id="displayMyObjectSetting" class="display-dummy-data-setting"><pre>{}</pre></div>
-                                <p class="desc">* 셋팅된 더미데이터 형태를 볼 수 있습니다.</p>
-                            </li>
-                            <li class="step">
-                                <h3 class="title">- 속성 추가</h3>
-                                <div>
-                                    <button type="button" id="add-property">Add Property</button>
-                                </div>
-                            </li>
-                            <li class="step">
-                                <ul id="add-property-group" class="add-property-list"></ul>
-                                <p class="desc">* Key 와 value 값은 한번 설정하면 수정이 불가합니다.</p>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                </div>
-            </section>
-            <!-- //더미데이터 생성기 v0.1 : START -->
             <!-- REST API (MCE DE, API EVENT) v0.1  : START -->
             <section class="section mce-send-wrap">
                 <h2 class="title">REST API (MCE DE, API EVENT) v0.1 <button type="button" class="toggle-btn" data-toggle="section2">열기</button></h2>
@@ -117,7 +89,56 @@
                 </div>
                 </div>
             </section>
-            <!-- //REST API (MCE DE, API EVENT) v0.1  : START -->
+            <!-- //REST API (MCE DE, API EVENT) v0.1  : END -->
+
+            <!-- 더미데이터 생성기 v0.1 : START -->
+            <section class="section dummy-data-wrap">
+                <h2 class="title">더미데이터 생성기 v0.1 <button type="button" class="toggle-btn" data-toggle="section1">열기</button></h2>
+                <div class="toggle-panel" data-toggle-panel="section1">
+                    <div class="flex-wrap al-s jc-sb g20">
+                        <div class="column n2">
+                            <ul class="dummy-data-create-list">
+                                <li class="step">
+                                    <h3 class="title">- 데이터 생성 갯수 지정</h3>
+                                    <fieldset class="input-btn-field">
+                                        <input type="text" id="data-length" placeholder="생성할 객체 갯수를 입력하세요.">
+                                        <button type="button" id="create-data" class="create-data-button bg-olive-green" onclick="createData()">생성</button>
+                                    </fieldset>
+                                </li>
+                                <li class="step">
+                                    <h3 class="title">- 최종 결과</h3>
+                                    <div class="output-options-wrap">
+                                        <button type="button" id="resetDummyData"  onclick="resetDummyData()">초기화</button>
+                                        <button type="button" id="exportCsvDummyData"  onclick="exportCsvDummyData()">CSV</button>
+                                        <button type="button" id="clipboardCopyDummyData"  onclick="clipboardCopyDummyData()">Copy</button>
+                                    </div>
+                                    <textarea id="dummyData" class="display-dummy-data" ></textarea>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="column n2">
+                            <ul class="dummy-data-create-list">
+                                <li class="step">
+                                    <h3 class="title">- 데이터 셋팅</h3>
+                                    <div id="displayMyObjectSetting" class="display-dummy-data-setting"><pre>{}</pre></div>
+                                    <p class="desc">* 셋팅된 더미데이터 형태를 볼 수 있습니다.</p>
+                                </li>
+                                <li class="step">
+                                    <h3 class="title">- 속성 추가</h3>
+                                    <div>
+                                        <button type="button" id="add-property">Add Property</button>
+                                    </div>
+                                </li>
+                                <li class="step">
+                                    <ul id="add-property-group" class="add-property-list"></ul>
+                                    <p class="desc">* Key 와 value 값은 한번 설정하면 수정이 불가합니다.</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- //더미데이터 생성기 v0.1 : END -->
         </div>
     </div>
 

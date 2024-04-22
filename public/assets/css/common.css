@@ -99,6 +99,8 @@ body,
 .toggle-panel {display:none;}
 .toggle-panel.is-show {display:block;}
 
+.utm-tag-view-list li + li {margin-top:10px;}
+
 @keyframes show {
     0%, 49.99% {
         opacity: 0;
