@@ -149,9 +149,14 @@ async function login() {
 
     axios.post('/login', loginData)
         .then(response => {
-            // 서버로부터 응답을 받았을 때 실행할 작업을 여기에 추가합니다.
+
             alert("로그인에 성공했습니다.")
-            loginData.utmTag === false ? window.location.href = `/main` : window.location.href= `/main${loginData.utmTag}`
+            loginData.utmTag === false ?
+                window.location.href = `/main` :
+                (
+                    sessionStorage.setItem("targetingUser", email),
+                    window.location.href= `/main${loginData.utmTag}`
+                )
         })
         .catch(error => {
             // 요청이 실패했을 때 실행할 작업을 여기에 추가합니다.
