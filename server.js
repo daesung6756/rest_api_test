@@ -241,29 +241,41 @@ const verifyToken = (req, res, next) => {
 //JWT가 존재하는 유저만 main 페이지로 이동
 app.get('/main', verifyToken, (req, res) => {
 
-    console.log(req.session.token);
-    console.log(req.session.utmTag);
     res.sendFile(__dirname + '/public/main.html');
 
 });
 
+// 로그아웃
 app.post('/logout', (req, res) => {
-    // 세션 파기
-    req.session.destroy((err) => {
-        if (err) {
-            // 세션 파기 실패 시
-            console.error('로그아웃 처리 중 문제가 생겼습니다:', err);
-            return res.status(500).json({
-                message: '로그아웃 처리 중 문제가 생겼습니다.',
-                error: err.message,
-            });
-        }
-        // 세션 파기 성공 시
-        console.log('로그아웃 성공');
-        res.status(200).send('로그아웃되었습니다.');
-
-        // 선택 사항: 로그인 페이지로 리디렉션
-        // res.redirect('/login');
-    });
+    try {
+        req.session = null;
+        return res.status(200).send('로그아웃 되었습니다.');
+    } catch(err) {
+        console.log('로그아웃 처리 중 문제가 생겼습니다:', err)
+        return res.status().json({
+            message: '로그아웃 처리 중 문제가 생겼습니다.',
+            error: err.message,
+        });
+    }
 });
+
+// app.post('/logout', (req, res) => {
+//     // 세션 파기
+//     req.session.destroy((err) => {
+//         if (err) {
+//             // 세션 파기 실패 시
+//             console.error('로그아웃 처리 중 문제가 생겼습니다:', err);
+//             return res.status(500).json({
+//                 message: '로그아웃 처리 중 문제가 생겼습니다.',
+//                 error: err.message,
+//             });
+//         }
+//         // 세션 파기 성공 시
+//         console.log('로그아웃 성공');
+//         res.status(200).send('로그아웃되었습니다.');
+
+//         // 선택 사항: 로그인 페이지로 리디렉션
+//         // res.redirect('/login');
+//     });
+// });
 

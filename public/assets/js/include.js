@@ -12,7 +12,7 @@ const include = {
         document.write(`<div class="inner">`)
         document.write(`<h1 class="title">SFMC용 Generator Set v0.1</h1>`)
         if(isLogged) {
-            document.write(`<button type="button" id="logout" class="logout bg-orange">LOGOUT</button>`)
+            document.write(`<button onclick="logout()" type="button" id="logout" class="logout bg-orange">LOGOUT</button>`)
         }
         document.write(`</div>`)
         document.write(`</header>`)

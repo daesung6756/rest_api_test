@@ -146,7 +146,6 @@ async function login() {
     axios.post('/login', loginData)
         .then(response => {
             // 서버로부터 응답을 받았을 때 실행할 작업을 여기에 추가합니다.
-            console.log(response.data);
             alert("로그인에 성공했습니다.")
             window.location.href = '/main';
         })
