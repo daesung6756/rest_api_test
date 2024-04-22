@@ -25,8 +25,8 @@ const authUrl = `https://${SUB_DOMAIN}.auth.marketingcloudapis.com/v2/token`;
 app.use(cors());
 
 // html파일에 직접 접근 거부
-app.use('/main.html', (req, res) => {
-    return res.redirect('/main');
+app.use('/*.html', (req, res) => {
+    return res.redirect('/');
 });
 
 // 정적 파일을 제공할 폴더 설정
@@ -34,6 +34,7 @@ app.use(express.static('public'));
 
 // Body parser middleware to handle post requests
 app.use(bodyParser.json());
+
 
 // 세션 데이터 암호화
 app.use(cookieSession({ name: "auth", keys: ["COOKIE_SECRET"], httpOnly: true }));
@@ -208,7 +209,7 @@ app.post('/login', async(req, res) => {
             req.session.token = jsonWebToken;
             req.session.utmTag = utmTag;
 
-            return res.status(200).redirect('/main');
+            return res.status(200).redirect(`/main`);
         } else {
             return res.status(401).send('비밀번호를 확인해주세요.');
         }

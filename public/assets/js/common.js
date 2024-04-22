@@ -4,7 +4,11 @@ const deKeyInput = document.getElementById("bulkDeInput")
 const apiEventInput = document.getElementById("singleApiEventInput")
 const loader = document.getElementById("loader");
 const chance = new Chance();
-const form = document.getElementById("signInForm")
+const form = document.getElementById("signInForm");
+const targetingUser = {
+    SubscriberKey: null,
+    EmailAddress : null
+}
 
 // 숫자 유효성 검사
 function isValidNumber(number) {
@@ -140,14 +144,14 @@ async function login() {
     const loginData = {
         userId: email, // email이 userId로 사용될 수 있음
         userPassword: password,
-        utmTag: isUtmTagExists() ? `utm_tag=${getUtmTagValue()}` : false
+        utmTag: isUtmTagExists() ? `?utm_tag=${getUtmTagValue()}` : false
     }
 
     axios.post('/login', loginData)
         .then(response => {
             // 서버로부터 응답을 받았을 때 실행할 작업을 여기에 추가합니다.
             alert("로그인에 성공했습니다.")
-            window.location.href = '/main';
+            loginData.utmTag === false ? window.location.href = `/main` : window.location.href= `/main${loginData.utmTag}`
         })
         .catch(error => {
             // 요청이 실패했을 때 실행할 작업을 여기에 추가합니다.
@@ -168,6 +172,7 @@ async function logout() {
         if (response.status === 200) {
             // 로그아웃이 성공하면 로그인 페이지로 리디렉션
             window.location.href = '/';
+            sessionStorage.clear();
         } else {
             // 로그아웃 실패 시 오류 메시지 출력
             console.error('로그아웃 실패:', response.data.message);
@@ -188,13 +193,29 @@ function getUtmTagValue() {
     return urlParams.get('utm_tag').trim();
 }
 
+function utmTagCapture() {
+    if(window.location.href.indexOf("main") === -1) return
+
+    const utmTagStatus = document.getElementById("utmTagStatus")
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+
+    if (params.has('utm_tag')) {
+        utmTagStatus.textContent = 'utm_tag 파라미터가 있습니다.';
+        targetingUser.SubscriberKey = params.get('utm_tag').replace(/"/g, '');
+        targetingUser.EmailAddress = sessionStorage.getItem("targetingUser")
+        console.log(targetingUser)
+    } else {
+        utmTagStatus.textContent = 'utm_tag 파라미터가 없습니다.';
+    }
+}
+
 function loadingEvent (second) {
     loader.classList.add("is-show")
     const loadingTimer = setTimeout(() => {
         loader.classList.remove("is-show")
         clearTimeout(loadingTimer)
     }, second)
-
 }
 const commonFunc = {
     toggle : function (elem , className){
@@ -202,8 +223,49 @@ const commonFunc = {
     },
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+const UI = {
+    init: function () {
+        this.togglePanel.init()
+    },
+    togglePanel: {
+        name:"togglePanel",
+        items: document.querySelectorAll("[data-toggle]"),
+        itemArray : [],
+        init : function () {
+            this.items.length > 0 ?
+                this.captureData() :
+                (
+                    console.log(`Component [${this.name}] : Not Used`)
+                )
+        },
+        captureData : function () {
+            const _this = this;
+            this.items.forEach((item) => {
+                if(_this.itemArray.indexOf(item.dataset.toggle) === -1){
+                    _this.itemArray.push(item.dataset.toggle)
+                }
+            })
 
+            if(this.itemArray.length > 0){
+                this.listener()
+            }
+        },
+        listener : function () {
+            this.itemArray.forEach((dataName) => {
+                const btn = document.querySelector(`[data-toggle=${dataName}]`)
+                const panel = document.querySelector(`[data-toggle-panel=${dataName}]`)
+
+                btn.addEventListener("click", () => {
+                    commonFunc.toggle(panel, "is-show")
+                    panel.classList.contains("is-show") ? btn.textContent = "닫기" : btn.textContent = "열기"
+                })
+            })
+        }
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    UI.init()
 
     if(form){
         form.addEventListener("submit", (e) => {
@@ -215,14 +277,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // container 높이 조절
 window.addEventListener('load', function() {
+
+    utmTagCapture()
+
     const headerHeight = document.querySelector('.header').clientHeight;
     const footerHeight = document.querySelector('.footer').clientHeight;
     const container = document.querySelector('.container');
     const content = document.querySelector('.content');
-    const calculatedHeight = window.innerHeight - (headerHeight + footerHeight + 41);
+    let calculatedHeight = window.innerHeight - (headerHeight + footerHeight);
+
+    if(content.classList.contains("is-center")) {
+        calculatedHeight = calculatedHeight - 41
+        content.style.minHeight = calculatedHeight + 'px';
+    }
 
     container.style.minHeight = calculatedHeight + 'px';
-    if(content.classList.contains("is-center")) content.style.minHeight = calculatedHeight + 'px';
 
     loadingEvent(900)
 });
