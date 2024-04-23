@@ -314,7 +314,6 @@ app.put('/testSendRecords', async (req, res) => {
         const data = {
             "values": {
                 "ContackKey" : user.ContactKey,
-                "EmailAddress": user.EmailAddress,
                 "isTest": true
             }
         };
