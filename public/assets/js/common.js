@@ -6,7 +6,7 @@ const loader = document.getElementById("loader");
 const chance = new Chance();
 const form = document.getElementById("signInForm");
 const targetingUser = {
-    SubscriberKey: null,
+    ContactKey: null,
     EmailAddress : null
 }
 
@@ -62,6 +62,21 @@ function sendApiEventData(apiKey) {
         alert("API 키가 올바르지 않거나 값이 없습니다.")
     }
 }
+function testApiEventAdd () {
+    try {
+        if(!isUtmTagExists()) return;
+
+        const response = axios.post("/testSendApiEvent", targetingUser, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        console.log('Response:', response);
+        alert('Data successfully sent to the server!');
+    } catch (error) {
+        console.error('Error sending data to the server:', error);
+        alert('Failed to send data to the server. Please try again later.');
+    }
+}
+
 // makeBulkDummyData 함수를 호출하여 더미 데이터 생성
 function makeBulkDummyData(record) {
     record.trim()
@@ -207,7 +222,7 @@ function utmTagCapture() {
 
     if (params.has('utm_tag')) {
         utmTagStatus.textContent = 'utm_tag 파라미터가 있습니다.';
-        targetingUser.SubscriberKey = params.get('utm_tag').replace(/"/g, '');
+        targetingUser.ContactKey = params.get('utm_tag').replace(/"/g, '');
         targetingUser.EmailAddress = sessionStorage.getItem("targetingUser")
         console.log(targetingUser)
     } else {

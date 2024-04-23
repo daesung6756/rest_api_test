@@ -16,6 +16,7 @@ const SUB_DOMAIN = process.env.SUB_DOMAIN;
 const USER_ID = process.env.USER_ID;
 const USER_PASSWORD = process.env.USER_PASSWORD;
 const JSON_WEB_TOKEN = process.env.TOKEN;
+const TEST_EVENT_DEFINITION_KEY = process.env.TEST_EVENT_DEFINITION_KEY;
 
 let DATA_EXTENSION_EXTERNAL_KEY = null;
 let EVENT_DEFINITION_KEY = null;
@@ -260,23 +261,45 @@ app.post('/logout', (req, res) => {
     }
 });
 
-// app.post('/logout', (req, res) => {
-//     // 세션 파기
-//     req.session.destroy((err) => {
-//         if (err) {
-//             // 세션 파기 실패 시
-//             console.error('로그아웃 처리 중 문제가 생겼습니다:', err);
-//             return res.status(500).json({
-//                 message: '로그아웃 처리 중 문제가 생겼습니다.',
-//                 error: err.message,
-//             });
-//         }
-//         // 세션 파기 성공 시
-//         console.log('로그아웃 성공');
-//         res.status(200).send('로그아웃되었습니다.');
+app.post('/testSendApiEvent', async(req, res) => {
+    try {
+        const accessToken = await getAccessToken(); // 액세스 토큰을 얻을 때까지 기다립니다.
+        const { ContactKey, EmailAddress  } = req.body;
 
-//         // 선택 사항: 로그인 페이지로 리디렉션
-//         // res.redirect('/login');
-//     });
-// });
+        const data = {
+            "ContactKey": ContactKey,
+            "EventDefinitionKey": TEST_EVENT_DEFINITION_KEY,
+            "Data": {
+                "SubscriberKey": ContactKey,
+                "EmailAddress": EmailAddress,
+                "FirstName": "",
+                "LastName": "",
+                "Phone": "",
+            }
+        }
 
+        const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/interaction/v1/events`;
+
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        };
+
+        const response = await axios.post(endpoint, data, config);
+        const responseData = response.data;
+
+        if (response.status === 200 || response.status === 201) {
+            res.status(200 || 201).json({ message: '성공', response: responseData });
+        } else if (response.status === 202) {
+            res.status(202).json({ message: '잠시 대기중', response: responseData });
+        }
+    } catch (error) {
+        console.error('에러 코드:', error.response?.status);
+        console.error('에러 메시지:', error.message);
+        console.error('API 응답 데이터:', error.response?.data);
+
+        res.status(error.response?.status || 500).json({ message: '실패입니다.', error: error.message});
+    }
+});
