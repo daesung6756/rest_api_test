@@ -17,6 +17,7 @@ const USER_ID = process.env.USER_ID;
 const USER_PASSWORD = process.env.USER_PASSWORD;
 const JSON_WEB_TOKEN = process.env.TOKEN;
 const TEST_EVENT_DEFINITION_KEY = process.env.TEST_EVENT_DEFINITION_KEY;
+const TEST_DATA_EXTENSION_EXTERNAL_KEY = process.env.TEST_DATA_EXTENSION_EXTERNAL_KEY
 
 let DATA_EXTENSION_EXTERNAL_KEY = null;
 let EVENT_DEFINITION_KEY = null;
@@ -261,6 +262,9 @@ app.post('/logout', (req, res) => {
     }
 });
 
+
+
+//test
 app.post('/testSendApiEvent', async(req, res) => {
     try {
         const accessToken = await getAccessToken(); // 액세스 토큰을 얻을 때까지 기다립니다.
@@ -301,5 +305,42 @@ app.post('/testSendApiEvent', async(req, res) => {
         console.error('API 응답 데이터:', error.response?.data);
 
         res.status(error.response?.status || 500).json({ message: '실패입니다.', error: error.message});
+    }
+});
+app.put('/testSendRecords', async (req, res) => {
+    try {
+        const accessToken = await getAccessToken(); // 액세스 토큰을 얻을 때까지 기다립니다.
+        const user = req.body;
+        const data = {
+            "values": {
+                "ContackKey" : user.ContactKey,
+                "EmailAddress": user.EmailAddress,
+                "isTest": true
+            }
+        };
+
+
+        const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/hub/v1/dataeventsasync/key:${DATA_EXTENSION_EXTERNAL_KEY}/rowset`;
+
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const response = await axios.post(endpoint, data, config);
+        const responseData = response.data;
+
+        if (response.status === 200) {
+            res.status(200).json({ message: '성공', response: responseData });
+        } else if(response.status === 202) {
+            res.status(202).json({ message: '잠시 대기중', response: responseData });
+        } else if(response.status === 413) {
+            res.status(413).json({ message: '레코드 갯수가 너무 많습니다. (최대 하루 5000개)', response: responseData });
+        }
+    } catch (error) {
+        console.error('실패', error);
+        res.status(500).json({ message: '실패입니다.', error: error.message });
     }
 });

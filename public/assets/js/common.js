@@ -62,20 +62,7 @@ function sendApiEventData(apiKey) {
         alert("API 키가 올바르지 않거나 값이 없습니다.")
     }
 }
-function testApiEventAdd () {
-    try {
-        if(!isUtmTagExists()) return;
 
-        const response = axios.post("/testSendApiEvent", targetingUser, {
-            headers: { 'Content-Type': 'application/json' }
-        });
-        console.log('Response:', response);
-        alert('Data successfully sent to the server!');
-    } catch (error) {
-        console.error('Error sending data to the server:', error);
-        alert('Failed to send data to the server. Please try again later.');
-    }
-}
 
 // makeBulkDummyData 함수를 호출하여 더미 데이터 생성
 function makeBulkDummyData(record) {
@@ -283,6 +270,37 @@ const UI = {
         }
     }
 }
+// api event test
+function testApiEventAdd () {
+    try {
+        if(!isUtmTagExists()) return alert("태그가 없습니다.");
+
+        const response = axios.post("/testSendApiEvent", targetingUser, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        console.log('Response:', response);
+        alert('Data successfully sent to the server!');
+    } catch (error) {
+        console.error('Error sending data to the server:', error);
+        alert('Failed to send data to the server. Please try again later.');
+    }
+}
+// de update test
+function testDeEventPut () {
+    try {
+        if(!isUtmTagExists()) return alert("태그가 없습니다.");
+
+        const response = axios.post("/testSendRecords", targetingUser, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        console.log('Response:', response);
+        alert('Data successfully sent to the server!');
+    } catch (error) {
+        console.error('Error sending data to the server:', error);
+        alert('Failed to send data to the server. Please try again later.');
+    }
+}
+
 
 document.addEventListener("DOMContentLoaded", () => {
     UI.init()
