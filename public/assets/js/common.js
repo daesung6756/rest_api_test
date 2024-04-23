@@ -290,7 +290,7 @@ function testDeEventPut () {
     try {
         if(!isUtmTagExists()) return alert("태그가 없습니다.");
 
-        const response = axios.post("/testSendRecords", targetingUser, {
+        const response = axios.put("/testSendRecords", targetingUser, {
             headers: { 'Content-Type': 'application/json' }
         });
         console.log('Response:', response);

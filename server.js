@@ -313,13 +313,11 @@ app.put('/testSendRecords', async (req, res) => {
         const user = req.body;
         const data = {
             "values": {
-                "ContackKey" : user.ContactKey,
-                "isTest": true
+                "IsTest": true
             }
         };
 
-
-        const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/hub/v1/dataeventsasync/key:${DATA_EXTENSION_EXTERNAL_KEY}/rowset`;
+        const endpoint = `https://${SUB_DOMAIN}.rest.marketingcloudapis.com/hub/v1/dataeventsasync/key:${TEST_DATA_EXTENSION_EXTERNAL_KEY}/rows/ContactKey:${user.ContactKey}`;
 
         const config = {
             headers: {
