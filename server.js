@@ -307,6 +307,7 @@ app.post('/testSendApiEvent', async(req, res) => {
         res.status(error.response?.status || 500).json({ message: '실패입니다.', error: error.message});
     }
 });
+
 app.put('/testSendRecords', async (req, res) => {
     try {
         const accessToken = await getAccessToken(); // 액세스 토큰을 얻을 때까지 기다립니다.
@@ -326,13 +327,13 @@ app.put('/testSendRecords', async (req, res) => {
             }
         };
 
-        const response = await axios.post(endpoint, data, config);
+        const response = await axios.put(endpoint, data, config);
         const responseData = response.data;
 
         if (response.status === 200) {
             res.status(200).json({ message: '성공', response: responseData });
         } else if(response.status === 202) {
-            res.status(202).json({ message: '잠시 대기중', response: responseData });
+            res.status(202).json({ message:                                                                                                                       '잠시 대기중', response: responseData });
         } else if(response.status === 413) {
             res.status(413).json({ message: '레코드 갯수가 너무 많습니다. (최대 하루 5000개)', response: responseData });
         }
